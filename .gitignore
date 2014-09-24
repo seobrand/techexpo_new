@@ -1,0 +1,12 @@
+/cpmove-techexpo
+/app/Config
+/app/tmp
+/lib/Cake/Console/Templates/skel/tmp/
+/app/webroot
+/.settings
+/nbproject
+*.zip
+*.sql
+*.gz
+*webrot
+/app/webrot

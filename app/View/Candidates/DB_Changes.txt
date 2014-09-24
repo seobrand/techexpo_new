@@ -1,0 +1,221 @@
+ALTER TABLE `users`
+ADD `created` date NULL AFTER `pwd_last_change`,
+COMMENT=''
+
+ALTER TABLE `show_company_profiles`
+ADD `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+COMMENT=''
+
+ALTER TABLE `resume_set_rules`
+ADD PRIMARY KEY `set_id` (`set_id`),
+DROP INDEX `set_id`;
+
+ALTER TABLE `resume_set_rules`
+ADD INDEX `set_id` (`set_id`);
+
+ALTER TABLE `job_score`
+ADD `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+COMMENT=''
+
+ALTER TABLE `resume_score`
+ADD `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+COMMENT=''
+
+ALTER TABLE `employers`
+ADD `created` date NULL AFTER `max_jobs`,
+COMMENT=''
+
+ALTER TABLE `employer_contacts`
+ADD `created` date NULL AFTER `contact_email_job`,
+COMMENT=''
+
+CREATE DATABASE `techexpo_banners`;
+
+CREATE TABLE `ads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(255) NULL,
+  `filename` varchar(510) NULL,
+  `alt` varchar(255) NULL,
+  `href` varchar(1024) NULL,
+  `category_link` varchar(1024) NULL,
+  `ad_link` varchar(1024) NULL
+) COMMENT='' ENGINE='InnoDB';
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `category_name` varchar(255) NULL
+) COMMENT='' ENGINE='InnoDB';
+
+INSERT INTO `category` (`category_name`)
+VALUES ('corp');
+
+INSERT INTO `category` (`category_name`)
+VALUES ('emp');
+
+
+INSERT INTO `category` (`category_name`)
+VALUES ('media');
+
+CREATE TABLE `performance` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `ad_id` int(11) NULL,
+  `loads` int(11) NULL,
+  `clickthru` int(11) NULL
+) COMMENT='' ENGINE='InnoDB';
+
+ALTER TABLE `performance`
+ADD `ad_location` int(11) NULL AFTER `clickthru`,
+ADD `track_id` int(11) NULL AFTER `ad_location`,
+COMMENT=''
+
+ALTER TABLE `performance`
+CHANGE `ad_location` `ad_location` varchar(1024) NULL AFTER `clickthru`,
+CHANGE `track_id` `track_id` varchar(1024) NULL AFTER `ad_location`,
+COMMENT=''
+
+ALTER TABLE `performance`
+DROP `track_id`,
+COMMENT=''
+
+ALTER TABLE `ads`
+CHANGE `ad_link` `path` varchar(1024) COLLATE 'latin1_swedish_ci' NULL AFTER `category_link`,
+COMMENT=''
+
+
+ALTER TABLE `tracking_pages`
+ADD `contact_email` varchar(200) COLLATE 'utf8_general_ci' NULL AFTER `organization`,
+COMMENT=''
+
+
+ALTER TABLE `employers`
+ADD `is_featured` enum('y','n') NULL DEFAULT 'n' AFTER `created`,
+COMMENT=''
+
+CREATE TABLE `partners` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `partner_name` varchar(100) NULL,
+  `partner_logo` varchar(500) NULL
+) COMMENT='' ENGINE='InnoDB';
+
+
+
+ALTER TABLE `users`
+CHANGE `created` `created` datetime NULL AFTER `pwd_last_change`,
+COMMENT=''
+
+
+ALTER TABLE `employers`
+CHANGE `created` `created` datetime NULL AFTER `max_jobs`,
+COMMENT=''
+
+UPDATE `employers` SET
+`max_jobs` = '10'
+
+CREATE TABLE `email_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL
+) COMMENT='' ENGINE='InnoDB';
+
+
+ALTER TABLE `email_templates`
+ADD `footer_message` text COLLATE 'latin1_swedish_ci' NOT NULL AFTER `message`,
+COMMENT=''
+
+ALTER TABLE `email_templates`
+CHANGE `title` `title` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `id`,
+CHANGE `subject` `subject` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `title`,
+CHANGE `message` `message` text COLLATE 'latin1_swedish_ci' NULL AFTER `subject`,
+CHANGE `footer_message` `footer_message` text COLLATE 'latin1_swedish_ci' NULL AFTER `message`,
+COMMENT=''
+
+INSERT INTO `email_templates` (`id`, `title`, `subject`, `message`, `footer_message`) VALUES
+(1,	'Event assign as non-virtual exhibitor',	'Important TECHEXPO information',	'<p>Dear TECHEXPO exhibitor,<br /><br />Thank you for participating in TECHEXPO Show. You have just been assigned to the show on our website. Attached to this e-mail is your confirmation packet. Please print it out and review it carefully as it contains *VERY IMPORTANT* information. You can also download this packet from your employer homepage, below the \"Show Registration &amp; Resume Access Information\" heading.<br /><br />Why is this important? By visiting the \"Event information\" areas of our site, technology professionals can see your company name, click on it to view your profile and open positions and apply directly online, sending resumes your way via e-mail. You can then get in touch with candidates via e-mail to schedule show day interviews in advance.  This is also where the site pulls your company information for the event gulde, which goes to print one week prior to the event. A completed profile also gives your company a more professional image and will increase traffic at your booth on the day of the show.<br /><br />Thank you in advance for your cooperation.</p>',	'<p>If you have any questions or need technical assistance, email nmathew@TechExpoUSA.com or call Nancy Mathew at 212.655.4505 ext. 225<br /><br />Sincerely, <br /><br />Nancy Mathew<br />Director of Events and Marketing<br />212.655.4505 ext. 225</p>'),
+(2,	'Event assign as virtual exhibitor',	'Important TECHEXPO information',	'<p>Dear TechExpoUSA.com client,<br /><br />Thank you for participating in our virtual job fair . You have just been assigned to the show as a virtual exhibitor on our website.<br /><br />The virtual job fair includes:<br /><br />- A listing on the show information page as a virtual exhibitor, listed in purple font<br />- The ability to post 10 jobs on our site<br />- Access to the resume database for that event including both resumes collected at the show and those submitted online.<br />- Inclusion In the event guide, which will be passed out on the day of the show. (You must fill out your company profile to be included)<br /><br />If you have not done so yet, please take a moment to complete your profile and post your jobs at http://www.TechExpoUSA.com/users/login<br /><br /> This is also where the site pulls your company information for the show gulde, which goes to print one week prior to the event.<br /><br />Why is this important? By visiting the \"Event Information\" areas of our site, technology professionals can see your company name, click on it to view your profile and open positions and apply directly online, sending resumes your way via e-mail. You can then get in touch with candidates via e-mail to schedule show day interviews in advance.  A completed profile also gives your company a more professional image and will increase your chances of getting responses.<br /><br />Upon receipt of payment, access to the database will be turned on.  IF you have purchased the Virtual Job Fair to an event that has not yet happened, use the \"search pre-registered candidates\" tool.  If the event has already passed, please use the \"search resumes\" tool.</p>',	'<p>If you have any questions or need technical assistance, email nmathew@TechExpoUSA.com or call Nancy Mathew at 212.655.4505 ext. 225. <br /><br />Sincerely, <br /><br />Nancy Mathew<br />Director of Events and Marketing<br />212.655.4505 ext. 225</p>'),
+(3,	'Assign Resume Database to client',	'Important techexpoUSA.com resume access information',	'<p>Dear TECHEXPO Client,<br /><br />Your resume access privileges have just been updated. You can check which databases you currently have access to from your \"employer homepage\" (the screen you are taken to after logging in). Visit us at http://www.TechExpoUSA.com to begin searching and post up to 25 jobs.</p>',	'<p>If you have any questions or need technical assistance, email nmathew@TechExpoUSA.com or call Nancy Mathew at 212.655.4505 ext. 225.<br /><br />Sincerely, <br /><br />Nancy Mathew<br />Director of Events and Marketing<br />212.655.4505 ext. 225</p>'),
+(4,	'View Exhibitor List',	'Important techexpoUSA.com resume access information',	'<p>Dear TECHEXPO Client,<br /><br />Your resume access privileges have just been updated. You can check which databases you currently have access to from your \"employer homepage\" (the screen you are taken to after logging in). Visit us at http://www.TechExpoUSA.com to begin searching and post up to 10 jobs.<br /></p>',	'<p>If you have any questions or need technical assistance, email nmathew@TechExpoUSA.com or call Nancy Mathew at 212.655.4505 ext. 225.<br /><br />Sincerely, <br /><br />Nancy Mathew<br />Director of Events and Marketing<br />212.655.4505 ext. 225</p>'),
+(5,	'Create Trial Account',	'Welcome to TechExpoUSA.com ! Account information enclosed',	'<p>Thank you for joining TechExpoUSA.com. Your trial account is active and you can start searching resumes by visiting http://www.TechExpoUSA.com and logging in.<br /><br />You will be notified by e-mail when your trial period expires. To purchase permanent access to the resume database, please contact your sales representative:</p>',	'<p>If you have any questions or need technical assistance, email  nmathew@TechExpoUSA.com or call Nancy Mathew at 212.655.4505 ext. 225. <br /><br />Again, it is truly a pleasure to welcome you.</p>\r\n<p>Sincerely, <br /><br />Nancy Mathew<br />Director of Events and Marketing<br />212.655.4505 ext. 225</p>');
+
+
+
+CREATE TABLE `newsletter_subscribers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `subscriber_email` varchar(255) NULL,
+  `created_date` date NULL
+) COMMENT='' ENGINE='InnoDB';
+
+
+CREATE TABLE `jobplans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `title` varchar(255) NULL,
+  `price` varchar(255) NULL,
+  `jobs` varchar(255) NULL,
+  `is_active` enum('y','n') NULL DEFAULT 'y',
+  `created` date NULL
+) COMMENT='' ENGINE='InnoDB';
+
+
+INSERT INTO `jobplans` (`id`, `title`, `price`, `jobs`, `is_active`, `created`) VALUES
+(1,	'Job Plan 250',	250.00,	5,	'y',	'2012-10-16'),
+(2,	'Job Plan 150',	150.00,	3,	'n',	'2012-10-16'),
+(3,	'Job Plan 10',	10.00,	1,	'y',	'2012-10-16');
+
+CREATE TABLE `jobplan_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `employerID` int(11) NULL,
+  `jobplan_title` varchar(255) NULL,
+  `jobplan_price` decimal(8,2) NULL,
+  `jobplan_jobs` int(11) NULL,
+  `cc_firstname` varchar(255) NULL,
+  `cc_lastname` varchar(255) NULL,
+  `cc_type` varchar(255) NULL,
+  `order_date` date NULL
+) COMMENT='' ENGINE='InnoDB';
+
+
+ALTER TABLE `jobplan_history`
+CHANGE `employerID` `employer_id` int(11) NULL AFTER `id`,
+COMMENT=''
+
+ALTER TABLE `partners`
+ADD `employer_id` int(11) NULL AFTER `partner_logo`,
+COMMENT=''
+
+
+ALTER TABLE resumes ENGINE = MYISAM
+
+ALTER TABLE resumes ADD FULLTEXT (resume_content)
+
+
+ALTER TABLE `codes`
+ADD PRIMARY KEY `chas1` (`code_id`),
+DROP INDEX `chas1`;
+
+
+
+
+ALTER TABLE `employer_videos`
+ADD `isApproved` enum('Y','N') COLLATE 'latin1_swedish_ci' NOT NULL DEFAULT 'N' AFTER `set_dashboard`,
+COMMENT=''
+
+
+ALTER TABLE `candidate_videos`
+ADD `isApproved` enum('Y','N') COLLATE 'latin1_swedish_ci' NOT NULL DEFAULT 'N' AFTER `set_dashboard`,
+COMMENT=''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
